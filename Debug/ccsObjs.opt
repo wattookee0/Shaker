@@ -1,0 +1,1 @@
+"./SPI.obj" "./clock.obj" "./interrupt.obj" "./main.obj" "./system_time.obj" "../lnk_msp430g2553.cmd" -llibc.a 
