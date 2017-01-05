@@ -18,6 +18,8 @@ typedef struct {
 
 extern unsigned long system_time;
 
+void configure_Main_Clock(void);
+
 unsigned char is_Timer_Expired(timer_t*);
 unsigned char is_Timer_Running(timer_t*);
 void set_Timer_Interval(timer_t*, signed long);

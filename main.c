@@ -1,6 +1,6 @@
 #include <msp430.h> 
 #include "main.h"
-#include "clock.h"
+#include "system_time.h"
 #include "SPI.h"
 
 /*
@@ -20,13 +20,24 @@ int main(void) {
 
     system_Setup();
 
+    //MAIN LOOP
+    while (1) {
+        //Check for presence of charger
+        //check supply voltage
+        //check for liquid
+        //check temperature
+        //check motor state/timer
+        //check for accelerometer input
+    }
+
+    //SPI test below here
 	//while (1) {
 //	    temp = SPI_Word(0x2303);  //three pin sPI mode
-        temp = SPI_Word(0xA000);  //read the CTRL1 register
+/*        temp = SPI_Word(0xA000);  //read the CTRL1 register
 	    temp = SPI_Word(0x203F);  //write: turn on active mode
 	    temp = SPI_Word(0xA000);  //read the CTRL1 register
 	    temp1 = SPI_Word(0x2201); //data ready interrupt enable
 	    temp1 = SPI_Word(0b1000111101010101);
-	    temp++;
+	    temp++;*/
 	//}
 }
