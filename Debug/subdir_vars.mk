@@ -10,44 +10,50 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../SPI.c \
-../clock.c \
+../adc.c \
 ../interrupt.c \
 ../main.c \
-../system_time.c 
+../system_time.c \
+../voltage_monitor.c 
 
 C_DEPS += \
 ./SPI.d \
-./clock.d \
+./adc.d \
 ./interrupt.d \
 ./main.d \
-./system_time.d 
+./system_time.d \
+./voltage_monitor.d 
 
 OBJS += \
 ./SPI.obj \
-./clock.obj \
+./adc.obj \
 ./interrupt.obj \
 ./main.obj \
-./system_time.obj 
+./system_time.obj \
+./voltage_monitor.obj 
 
 OBJS__QUOTED += \
 "SPI.obj" \
-"clock.obj" \
+"adc.obj" \
 "interrupt.obj" \
 "main.obj" \
-"system_time.obj" 
+"system_time.obj" \
+"voltage_monitor.obj" 
 
 C_DEPS__QUOTED += \
 "SPI.d" \
-"clock.d" \
+"adc.d" \
 "interrupt.d" \
 "main.d" \
-"system_time.d" 
+"system_time.d" \
+"voltage_monitor.d" 
 
 C_SRCS__QUOTED += \
 "../SPI.c" \
-"../clock.c" \
+"../adc.c" \
 "../interrupt.c" \
 "../main.c" \
-"../system_time.c" 
+"../system_time.c" \
+"../voltage_monitor.c" 
 
 

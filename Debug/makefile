@@ -11,10 +11,11 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./SPI.obj" \
-"./clock.obj" \
+"./adc.obj" \
 "./interrupt.obj" \
 "./main.obj" \
 "./system_time.obj" \
+"./voltage_monitor.obj" \
 "../lnk_msp430g2553.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -157,8 +158,8 @@ Shaker.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "SPI.obj" "clock.obj" "interrupt.obj" "main.obj" "system_time.obj" 
-	-$(RM) "SPI.d" "clock.d" "interrupt.d" "main.d" "system_time.d" 
+	-$(RM) "SPI.obj" "adc.obj" "interrupt.obj" "main.obj" "system_time.obj" "voltage_monitor.obj" 
+	-$(RM) "SPI.d" "adc.d" "interrupt.d" "main.d" "system_time.d" "voltage_monitor.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -14,10 +14,6 @@ unsigned char spi_input_buffer[SPI_BUFFER_SIZE];
 unsigned char spi_output_buffer_index = 0;
 unsigned char spi_output_buffer[SPI_BUFFER_SIZE];
 
-void __attribute__((interrupt(TIMER1_A0_VECTOR))) Timer1_A0_Interrupt(void) {
-    system_time++;
-}
-
 void __attribute__((interrupt(USCIAB0RX_VECTOR))) SPI_RX_Interrupt(void) {
     spi_input_buffer[spi_input_buffer_index] = UCA0RXBUF;   //grab any data
     if (spi_input_buffer_index < SPI_BUFFER_SIZE) {

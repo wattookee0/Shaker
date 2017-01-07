@@ -1,3 +1,4 @@
+#include <msp430.h>
 #include "adc.h"
 
 /*
@@ -38,7 +39,7 @@ void configure_ADC(void) {
     ADC10AE0 = 0;
     //input enable, 7-4: A15-A12, 3-0: reserved
     //only enable the analog inputs we're using
-    ADC10AE1 = 0;
+    //ADC10AE1 = 0;
     //ADC10MEM; //this is where the conversion is stored
 
 }
