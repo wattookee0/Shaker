@@ -8,6 +8,43 @@
  *      Author: dmatthews
  */
 
+#define ADC_CHANNEL(c)              0xc000
+
+#define ADC_CHANNEL_A0              0x0000
+#define ADC_CHANNEL_A1              0x1000
+#define ADC_CHANNEL_A2              0x2000
+#define ADC_CHANNEL_A3              0x3000
+#define ADC_CHANNEL_A4              0x4000
+#define ADC_CHANNEL_A5              0x5000
+#define ADC_CHANNEL_A6              0x6000
+#define ADC_CHANNEL_A7              0x7000
+//unused
+#define ADC_CHANNEL_TEMP_SENSOR     0xA000
+//unused
+#define ADC_CHANNEL_A12             0xC000
+#define ADC_CHANNEL_A13             0xD000
+#define ADC_CHANNEL_A14             0xE000
+#define ADC_CHANNEL_A15             0xF000
+
+//these select 1 bit of the ADC10AE0/ADC10AE1 registers, which enable the corresponding analog pins
+#define ADC_ENABLE_A0       0x01
+#define ADC_ENABLE_A1       0x02
+#define ADC_ENABLE_A2       0x04
+#define ADC_ENABLE_A3       0x08
+#define ADC_ENABLE_A4       0x10
+#define ADC_ENABLE_A5       0x20
+#define ADC_ENABLE_A6       0x40
+#define ADC_ENABLE_A7       0x80
+//unused
+#define ADC_ENABLE_TEMP     0x04    //this is a reserved bit in the register, not sure if this works?
+//unused
+#define ADC_ENABLE_A12      0x10
+#define ADC_ENABLE_A13      0x20
+#define ADC_ENABLE_A14      0x40
+#define ADC_ENABLE_A15      0x80
+
+unsigned int *adc_data_pointer = (unsigned int*) 0;     //this points to the place we want adc data to be stored
+
 void configure_ADC(void) {
     //Control Register 0
     //15-13: reference select, 000 = VCC and VSS
@@ -39,9 +76,70 @@ void configure_ADC(void) {
     ADC10AE0 = 0;
     //input enable, 7-4: A15-A12, 3-0: reserved
     //only enable the analog inputs we're using
-    //ADC10AE1 = 0;
+#if defined(ADC10AE1)           //the MSP430F2272 has this, but the G2553 doesn't
+    ADC10AE1 = 0;
+#endif
     //ADC10MEM; //this is where the conversion is stored
-
 }
 
+/* select_ADC_Channel(channel) puts the channel select bits into the ADC10CTL1 register
+ *
+ * pass in one of the defined ADC_CHANNEL_Ax's above, or ADC_CHANNEL(c) where c is a char like '0', 'E', etc.
+ * also pass in one of the defined ADC_ENABLE_Ax's
+ *
+ * @param channel       the channel to select, note the format in the defines at the top of this file
+ * @param enable_bit    the bit that will enable the corresponding analog pin (see defines above)
+ */
+unsigned char ADC_Select_And_Enable_Channel(unsigned int channel, unsigned char enable_bit) {
+    if (ADC10BUSY == 0) {       //checks the ADC10CTL1 bit 0 to see if ADC is running
+        ADC10CTL1   &= 0x0FFF;  //clear the channel select bits from this register
+        ADC10CTL1   |= channel; //set the channel select bits using the shifted channel number
+        ADC10AE0 &= 0xFF;       //clear the enable bits (this may be bad, because it disables other ADCs)
+#if defined(ADC10AE1)           //the MSP430F2272 has this, but the G2553 doesn't
+        ADC10AE1 &= 0xFF;       //however, it may be good, because we could multiplex the pins
+        if (channel > 7) {      //channels 12-15, and temp?
+            ADC10AE1    |= enable_bit;
+        } else
+#endif
+        {                //channels 0-7
+            ADC10AE0    |= enable_bit;
+        }
+        return 1u;  //return success
+    }
+    return 0;   //return failure
+}
 
+unsigned char ADC_Enable(void) {
+    if (ADC10BUSY == 0) {       //checks the ADC10CTL1 bit 0 to see if ADC is running
+        ADC10CTL0 |= 0x0018;    //register bits: 4: ADC on/off, 3:ADC interrupt enable
+        return 1u;              //return success
+    }
+    return 0u;                  //return failure
+}
+
+unsigned char ADC_Disable(void) {
+    if (ADC10BUSY == 0) {       //checks the ADC10CTL1 bit 0 to see if ADC is running
+        ADC10CTL0 &= 0xFFE7;    //register bits: 4: ADC on/off, 3:ADC interrupt enable
+        return 1u;              //return success
+    }
+    return 0u;                  //return failure
+}
+
+/* ADC_Start(*storage location)
+ *  points the ADC at some place in memory, then starts it
+ *
+ *  @param storage_location a pointer to the memory where adc results should be stored
+ */
+unsigned char ADC_Start(unsigned int *storage_location) {
+    if (ADC10BUSY == 0) {       //checks the ADC10CTL1 bit 0 to see if ADC is running
+        adc_data_pointer = storage_location; //point to some place in memory
+        ADC10CTL0 |= 0x0003;    //register bits: 1: enable conversion, 0: start conversion
+        return 1u;              //return success
+    }
+    return 0u;                  //return failure
+}
+
+//interrupt service routine for ADC
+void __attribute__((interrupt(ADC10_VECTOR))) ADC_Interrupt(void) {
+    *adc_data_pointer = ADC10MEM;   //this takes the ADC data and puts it in some memory location that adc_data_pointer is pointing at
+}
