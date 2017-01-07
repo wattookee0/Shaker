@@ -9,6 +9,8 @@ main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/include/intrinsics
 main.obj: ../main.h
 main.obj: ../system_time.h
 main.obj: ../SPI.h
+main.obj: ../adc.h
+main.obj: ../voltage_monitor.h
 
 ../main.c: 
 C:/ti/ccsv7/ccs_base/msp430/include/msp430.h: 
@@ -19,3 +21,5 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/include/intrinsics_legacy_un
 ../main.h: 
 ../system_time.h: 
 ../SPI.h: 
+../adc.h: 
+../voltage_monitor.h: 

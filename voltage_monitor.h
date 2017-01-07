@@ -10,10 +10,11 @@
 
 typedef struct {
     unsigned int value;
-    unsigned char input_pin;
+    unsigned char input_designator;
     unsigned int adc_channel;
 } voltage_t;
 
+void check_Battery_Voltage();
 unsigned char Voltage_Check(voltage_t*);
 
 #endif /* VOLTAGE_MONITOR_H_ */

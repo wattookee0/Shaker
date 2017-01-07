@@ -2,10 +2,14 @@
 #include "main.h"
 #include "system_time.h"
 #include "SPI.h"
+#include "adc.h"
+#include "voltage_monitor.h"
 
 /*
  * main.c
  */
+
+#define BATTERY_VOLTAGE_SOURCE 3
 
 unsigned int temp;
 unsigned int temp1;
@@ -14,6 +18,8 @@ void system_Setup(void) {
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
     configure_Main_Clock();     //sets the main clock up to run about 10Mhz
     configure_SPI();            //sets the SPI registers
+    configure_ADC();            //sets up the ADC registers
+    __enable_interrupt();      //turn on all interrupts
 }
 
 int main(void) {
@@ -22,6 +28,7 @@ int main(void) {
 
     //MAIN LOOP
     while (1) {
+        check_Battery_Voltage();
         //Check for presence of charger
         //check supply voltage
         //check for liquid
