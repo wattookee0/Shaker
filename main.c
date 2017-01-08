@@ -4,6 +4,7 @@
 #include "SPI.h"
 #include "adc.h"
 #include "voltage_monitor.h"
+#include "temp_sensor.h"
 
 /*
  * main.c
@@ -29,6 +30,7 @@ int main(void) {
     //MAIN LOOP
     while (1) {
         check_Battery_Voltage();
+        check_Temperature();
         //Check for presence of charger
         //check supply voltage
         //check for liquid

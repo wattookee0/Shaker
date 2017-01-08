@@ -111,4 +111,6 @@ unsigned char ADC_Start(unsigned int *storage_location) {
 //interrupt service routine for ADC
 void __attribute__((interrupt(ADC10_VECTOR))) ADC_Interrupt(void) {
     *adc_data_pointer = ADC10MEM;   //this takes the ADC data and puts it in some memory location that adc_data_pointer is pointing at
+    ADC10CTL0 &= 0xFFFD;  //clear bit 1 (ADC enable), now you can modify the register
+    ADC10CTL0 &= 0xFFED;  //clear bit 4 (ADC ON), to turn ADC off
 }

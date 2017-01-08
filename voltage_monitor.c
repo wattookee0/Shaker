@@ -15,6 +15,10 @@ void check_Battery_Voltage(void) {
     Voltage_Check(&battery_voltage);
 }
 
+void check_Charger_Voltage(void) {
+    Voltage_Check(&charger_voltage);
+}
+
 unsigned char Voltage_Check(voltage_t* source_to_check) {
     if (ADC_Select_And_Enable_Channel(source_to_check->adc_channel, source_to_check->input_designator) ) {
         if (ADC_Enable()) {

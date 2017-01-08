@@ -14,6 +14,7 @@ C_SRCS += \
 ../interrupt.c \
 ../main.c \
 ../system_time.c \
+../temp_sensor.c \
 ../voltage_monitor.c 
 
 C_DEPS += \
@@ -22,6 +23,7 @@ C_DEPS += \
 ./interrupt.d \
 ./main.d \
 ./system_time.d \
+./temp_sensor.d \
 ./voltage_monitor.d 
 
 OBJS += \
@@ -30,6 +32,7 @@ OBJS += \
 ./interrupt.obj \
 ./main.obj \
 ./system_time.obj \
+./temp_sensor.obj \
 ./voltage_monitor.obj 
 
 OBJS__QUOTED += \
@@ -38,6 +41,7 @@ OBJS__QUOTED += \
 "interrupt.obj" \
 "main.obj" \
 "system_time.obj" \
+"temp_sensor.obj" \
 "voltage_monitor.obj" 
 
 C_DEPS__QUOTED += \
@@ -46,6 +50,7 @@ C_DEPS__QUOTED += \
 "interrupt.d" \
 "main.d" \
 "system_time.d" \
+"temp_sensor.d" \
 "voltage_monitor.d" 
 
 C_SRCS__QUOTED += \
@@ -54,6 +59,7 @@ C_SRCS__QUOTED += \
 "../interrupt.c" \
 "../main.c" \
 "../system_time.c" \
+"../temp_sensor.c" \
 "../voltage_monitor.c" 
 
 
