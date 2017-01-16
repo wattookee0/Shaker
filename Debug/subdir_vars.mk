@@ -13,6 +13,7 @@ C_SRCS += \
 ../adc.c \
 ../interrupt.c \
 ../main.c \
+../moisture_sensor.c \
 ../system_time.c \
 ../temp_sensor.c \
 ../voltage_monitor.c 
@@ -22,6 +23,7 @@ C_DEPS += \
 ./adc.d \
 ./interrupt.d \
 ./main.d \
+./moisture_sensor.d \
 ./system_time.d \
 ./temp_sensor.d \
 ./voltage_monitor.d 
@@ -31,6 +33,7 @@ OBJS += \
 ./adc.obj \
 ./interrupt.obj \
 ./main.obj \
+./moisture_sensor.obj \
 ./system_time.obj \
 ./temp_sensor.obj \
 ./voltage_monitor.obj 
@@ -40,6 +43,7 @@ OBJS__QUOTED += \
 "adc.obj" \
 "interrupt.obj" \
 "main.obj" \
+"moisture_sensor.obj" \
 "system_time.obj" \
 "temp_sensor.obj" \
 "voltage_monitor.obj" 
@@ -49,6 +53,7 @@ C_DEPS__QUOTED += \
 "adc.d" \
 "interrupt.d" \
 "main.d" \
+"moisture_sensor.d" \
 "system_time.d" \
 "temp_sensor.d" \
 "voltage_monitor.d" 
@@ -58,6 +63,7 @@ C_SRCS__QUOTED += \
 "../adc.c" \
 "../interrupt.c" \
 "../main.c" \
+"../moisture_sensor.c" \
 "../system_time.c" \
 "../temp_sensor.c" \
 "../voltage_monitor.c" 

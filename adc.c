@@ -60,14 +60,14 @@ void configure_ADC(void) {
  * @param enable_bit    the bit that will enable the corresponding analog pin (see defines above)
  */
 unsigned char ADC_Select_And_Enable_Channel(unsigned int channel, unsigned char enable_bit) {
-    if ((ADC10CTL1 & ADC10BUSY) == 0) {       //checks the ADC10CTL1 bit 0 to see if ADC is running
-        ADC10CTL1   &= 0x0FFF;  //clear the channel select bits from this register
-        ADC10CTL1   |= channel; //set the channel select bits using the shifted channel number
-        ADC10AE0    &= 0x00;       //clear the enable bits (this may be bad, because it disables other ADCs)
-#if defined(ADC10AE1)           //the MSP430F2272 has this, but the G2553 doesn't
-        ADC10AE1 &= 0xFF;       //however, it may be good, because we could multiplex the pins
-        if (channel > 7) {      //channels 12-15, and temp?
-            ADC10AE1    |= enable_bit;
+    if ((ADC10CTL1 & ADC10BUSY) == 0) { //checks the ADC10CTL1 bit 0 to see if ADC is running
+        ADC10CTL1   &= 0x0FFF;          //clear the channel select bits from this register
+        ADC10CTL1   |= channel;         //set the channel select bits using the shifted channel number
+        ADC10AE0    &= 0x00;            //clear the enable bits (this may be bad, because it disables other ADCs)
+#if defined(ADC10AE1)                   //the MSP430F2272 has this, but the G2553 doesn't
+        ADC10AE1    &= 0x00;            //however, it may be good, because we could multiplex the pins
+        if (channel > 10) {             //channels 12-15, I don't think 11 exists or it's an internal reference
+            ADC10AE1 |= enable_bit;
         } else
 #endif
         {                //channels 0-7

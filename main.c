@@ -15,12 +15,15 @@
 unsigned int temp;
 unsigned int temp1;
 
+system_status_t system_status = {0, 0, 0, 0, 0, 0, 0}; //initialize system status register, holds flags for state of the system
+
 void system_Setup(void) {
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
     configure_Main_Clock();     //sets the main clock up to run about 10Mhz
     configure_SPI();            //sets the SPI registers
     configure_ADC();            //sets up the ADC registers
-    __enable_interrupt();      //turn on all interrupts
+    __enable_interrupt();       //turn on all interrupts
+    calibrate_Temperature();    //use ambient temp on power-on to set temp cutoff threshold
 }
 
 int main(void) {
@@ -29,11 +32,10 @@ int main(void) {
 
     //MAIN LOOP
     while (1) {
-        check_Battery_Voltage();
+        //check_Charger_Voltage();  //this is commented out because we haven't chosen the charger pin yet
+        //check_Battery_Voltage();
         check_Temperature();
-        //Check for presence of charger
-        //check supply voltage
-        //check for liquid
+        check_Moisture();
         //check temperature
         //check motor state/timer
         //check for accelerometer input
