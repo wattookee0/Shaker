@@ -12,6 +12,7 @@ main.obj: ../SPI.h
 main.obj: ../adc.h
 main.obj: ../voltage_monitor.h
 main.obj: ../temp_sensor.h
+main.obj: ../moisture_sensor.h
 
 ../main.c: 
 C:/ti/ccsv7/ccs_base/msp430/include/msp430.h: 
@@ -25,3 +26,4 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/include/intrinsics_legacy_un
 ../adc.h: 
 ../voltage_monitor.h: 
 ../temp_sensor.h: 
+../moisture_sensor.h: 

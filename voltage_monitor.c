@@ -14,7 +14,7 @@
 #define MAXIMUM_CHARGER_THRESHOLD           (unsigned int)420u  //4.2V, verify these are the correct numbers
 
                             //value, input designator, channel
-voltage_t battery_voltage = {1, 0, ADC_ENABLE_A3, ADC_CHANNEL_A3};
+voltage_t battery_voltage = {1, 0, ADC_ENABLE_A7, ADC_CHANNEL_A7};
 voltage_t charger_voltage = {1, 0, 0, 0};
 
 unsigned char check_Battery_Voltage(void) {

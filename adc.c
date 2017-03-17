@@ -11,7 +11,6 @@
 unsigned int *adc_data_pointer = (unsigned int*) 0;     //this points to the place we want adc data to be stored
 
 void configure_ADC(void) {
-    P1SEL |= BIT3;  //P1.3 is an input
     //Control Register 1
     //15-12: channel select, 1010 = temp sensor, select channel based on pin used
     //11-10: sample+hold source, 00 = ADC10SC bit
