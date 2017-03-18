@@ -15,10 +15,11 @@ ORDERED_OBJS += \
 "./interrupt.obj" \
 "./main.obj" \
 "./moisture_sensor.obj" \
+"./motor.obj" \
 "./system_time.obj" \
 "./temp_sensor.obj" \
 "./voltage_monitor.obj" \
-"../lnk_msp430g2553.cmd" \
+"../lnk_msp430f2272.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
 
@@ -147,7 +148,7 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 Shaker.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all --define=__MSP430G2553__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number -z -m"Shaker.map" --heap_size=80 --stack_size=80 -i"C:/ti/ccsv7/ccs_base/msp430/include" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/lib" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="Shaker_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Shaker.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all --define=__MSP430F2272__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU19 -z -m"Shaker.map" --heap_size=80 --stack_size=80 -i"C:/ti/ccsv7/ccs_base/msp430/include" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/lib" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.0.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="Shaker_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Shaker.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -160,8 +161,8 @@ Shaker.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "SPI.obj" "adc.obj" "interrupt.obj" "main.obj" "moisture_sensor.obj" "system_time.obj" "temp_sensor.obj" "voltage_monitor.obj" 
-	-$(RM) "SPI.d" "adc.d" "interrupt.d" "main.d" "moisture_sensor.d" "system_time.d" "temp_sensor.d" "voltage_monitor.d" 
+	-$(RM) "SPI.obj" "adc.obj" "interrupt.obj" "main.obj" "moisture_sensor.obj" "motor.obj" "system_time.obj" "temp_sensor.obj" "voltage_monitor.obj" 
+	-$(RM) "SPI.d" "adc.d" "interrupt.d" "main.d" "moisture_sensor.d" "motor.d" "system_time.d" "temp_sensor.d" "voltage_monitor.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

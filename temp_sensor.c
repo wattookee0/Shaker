@@ -16,9 +16,9 @@ unsigned char check_Temperature(void) {
         get_Temperature_Value(&temperature);    //get new data
     } else {                                    //otherwise, process the data we haven't seen yet
         if (temperature.value > 2*temperature.trigger_threshold) {
-            system_status.over_temperature_flag = 1u;   //set the over temperature flag
+            system_status.good_temperature_flag = 0u;   //clear the over temperature flag
         } else {
-            system_status.over_temperature_flag = 0u;   //clear the over temperature flag
+            system_status.good_temperature_flag = 1u;   //set the over temperature flag
         }
         temperature.stale_value_flag = 1;       //let the algorithm know we've seen the current data
     }

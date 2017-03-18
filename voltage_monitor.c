@@ -8,14 +8,9 @@
  *  Created on: Jan 4, 2017
  *      Author: dmatthews
  */
-
-#define LOW_BATTERY_VOLTAGE_THRESHOLD       (unsigned int)300u  //3V
-#define MINIMUM_CHARGER_THRESHOLD           (unsigned int)360u  //3.6V
-#define MAXIMUM_CHARGER_THRESHOLD           (unsigned int)420u  //4.2V, verify these are the correct numbers
-
                             //value, input designator, channel
-voltage_t battery_voltage = {1, 0, ADC_ENABLE_A3, ADC_CHANNEL_A3};
-voltage_t charger_voltage = {1, 0, 0, 0};
+voltage_t battery_voltage = {1, 0, ADC_ENABLE_A12, ADC_CHANNEL_A12};
+voltage_t charger_voltage = {1, 0, ADC_ENABLE_A7, ADC_CHANNEL_A7};
 
 unsigned char check_Battery_Voltage(void) {
     if (battery_voltage.stale_value_flag == 1) {
@@ -58,3 +53,10 @@ unsigned char get_Voltage_Value(voltage_t* source_to_check) {
     return 0u;
 }
 
+unsigned int get_Battery_Voltage(void) {
+    return battery_voltage.value;
+}
+
+unsigned int get_Charger_Voltage(void) {
+    return charger_voltage.value;
+}

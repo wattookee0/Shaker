@@ -8,7 +8,7 @@
  *  Created on: Jan 15, 2017
  *      Author: dmatthews
  */
-#define MINIMUM_MOISTURE_THRESHOLD (unsigned int)600u   //divider is R1=R2=1MOhm
+#define MINIMUM_MOISTURE_THRESHOLD (unsigned int)300u   //divider is R1=R2=1MOhm
                                                         //so ADC should read 512 (VCC/2) when no moisture
                                                         //and the water contacts are in parallel with R1
                                                         //so ADC should read >512 when yes moisture
@@ -16,17 +16,17 @@
                                                         //so I added in some "buffer" space to the min value
 
                         //stale value flag, value, pin designator, adc channel
-moisture_t moisture = {1, 0, ADC_ENABLE_A3, ADC_CHANNEL_A3};
+moisture_t moisture = {1, 0, ADC_ENABLE_A13, ADC_CHANNEL_A13};    //P1.6
                     //start with stale value flag high so the algorithm updates immediately
 
 unsigned char check_Moisture(void) {
     if (moisture.stale_value_flag == 1) {    //if we've seen the data in the struct already
             get_Moisture_Value(&moisture);    //get new data
         } else {                                    //otherwise, process the data we haven't seen yet
-            if (moisture.value > MINIMUM_MOISTURE_THRESHOLD) {
-                system_status.moisture_present_flag = 1u;   //set the over temperature flag
+            if (moisture.value < MINIMUM_MOISTURE_THRESHOLD) {
+                system_status.moisture_present_flag = 1u;   //set the moisture present flag
             } else {
-                system_status.moisture_present_flag = 0u;   //clear the over temperature flag
+                system_status.moisture_present_flag = 0u;   //clear the moisture present flag
             }
             moisture.stale_value_flag = 1;       //let the algorithm know we've seen the current data
         }

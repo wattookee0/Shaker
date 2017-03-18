@@ -38,7 +38,7 @@ void configure_Main_Clock(void) {
     //2 clear timer
     //1 interrupt enable,
     //0 interrupt flag
-    TACTL = 0b0000001000000010; //select SMCLK, divide by 1, stop mode, enable interrupt
+    TACTL = 0b0000001000010010; //select SMCLK, divide by 1, up mode, enable interrupt
 
     //TIMER A CAPTURE CONTROL:
     //15-14: capture mode,
@@ -59,14 +59,14 @@ void configure_Main_Clock(void) {
     TACCR0 = TIMER_A_INTERVAL;
 }
 
-void __attribute__((interrupt(TIMER1_A0_VECTOR))) Timer1_A0_Interrupt(void) {
+void __attribute__((interrupt(TIMER0_A0_VECTOR))) Timer0_A0_Interrupt(void) {
+    TACTL &=0b1111111111111110; //clear the interrupt flag
     if (tick_tock) {
         tick_tock = 0;
     } else {
         tick_tock = 1;
         system_time++;
     }
-
 }
 
 unsigned char is_Timer_Expired(timer_t* timer_to_check) {
