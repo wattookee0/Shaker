@@ -25,7 +25,7 @@ void configure_SPI(void) {
 
     //2. configure the SPI control registers
                     //MSB->LSB
-    UCA0CTL0    =   0b01101001; //clk phase select, clk polarity, MSB first, 8 bit length, master mode, 3 pin mode (00), sync mode
+    UCA0CTL0    =   0b10101001; //clk phase select, clk polarity, MSB first, 8 bit length, master mode, 3 pin mode (00), sync mode
     UCA0CTL1    =   0b11000001; //clock source (00->11),  (5-1 unused), reset enable
     UCA0BR0     =   0b10000010; //this and next byte form baud rate prescaler (clock source/prescaler) (BR0 + BR1*256 = clock prescaler for baud rate)
     UCA0BR1     =   0b00000000;
