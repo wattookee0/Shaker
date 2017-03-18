@@ -59,8 +59,8 @@ int main(void) {
 
     system_Setup();
 
-    temp = SPI_Word(0x2303);  //three pin sPI mode
-    temp = SPI_Word(0xA000);  //read the CTRL1 register
+    temp = SPI_Word(0x2302);  //disable I2C, enable SPI 3-wire
+    temp = SPI_Word(0xA300);  //read the CTRL1 register
 
     run_Motor_Timed(100);
 
