@@ -16,7 +16,7 @@
                                                         //so I added in some "buffer" space to the min value
 
                         //stale value flag, value, pin designator, adc channel
-moisture_t moisture = {1, 0, ADC_ENABLE_A6, ADC_CHANNEL_A6};    //P1.6
+moisture_t moisture = {1, 0, ADC_ENABLE_A13, ADC_CHANNEL_A13};    //P1.6
                     //start with stale value flag high so the algorithm updates immediately
 
 unsigned char check_Moisture(void) {

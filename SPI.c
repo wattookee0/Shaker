@@ -34,12 +34,19 @@ void configure_SPI(void) {
     //UCA0TXBUF   =   0b00000000; //transmit buffer, writing to this clears the tx interrupt flag
 
     //3. configure the port
-    P1OUT   |= 0b00110100;
-    P1DIR   |= 0b00110100; //Pin 5: slave enable (std I/O), 4: clockout, 2: master out, 1: master in, others: whatever
-    P1REN   |= 0b00000000;
-    P1SEL   |= 0b00010110;
-    P1SEL2  |= 0b00010110;
-    P1OUT   |= 0b00100000;  //go ahead and set CS high (which un-selects the chip)
+        //this is from G2553 launchpad
+        //P3OUT   |= 0b00110100;
+        //P3DIR   |= 0b00110100; //Pin 5: slave enable (std I/O), 4: clockout, 2: master out, 1: master in, others: whatever
+        //P3REN   |= 0b00000000;
+        //P3SEL   |= 0b00010110;
+        //P1SEL2  |= 0b00010110;
+        //P3OUT   |= 0b00100000;  //go ahead and set CS high (which un-selects the chip)
+
+    P3OUT   |= 0b00011001;
+    P3DIR   |= 0b00011001;  //P3.0 out (SCLK), 3.3 out (CS), 3.4 out (SIMO), 3.5 in (SOMI), 3.7 in (ADC Vexternal)
+    P3REN   |= 0b00000000;  //resistor enable (not needed)
+    P3SEL   |= 0b00110001;  //P3.0 clock, 3.3 CS, 3.4 SIMO, 3.5 SOMI, these enable SPI on the SPI pins
+    P3OUT   |= 0b00001000;
 
     //4. enable SPI
     UCA0CTL1    =   0b11000000; //bit 0 is UCSWRST
@@ -57,10 +64,10 @@ void configure_SPI(void) {
  */
 unsigned char SPI_Byte(unsigned char byte_to_send) {
     IFG2 &= ~(UCA0RXIFG);
-    P1OUT &= 0b11011111;
+    P3OUT &= 0b11110111;
     UCA0TXBUF = byte_to_send;
     while (!(IFG2 & UCA0RXIFG));
-    P1OUT |= 0b00100000;
+    P3OUT |= 0b00001000;
     return (UCA0RXBUF);
 }
 
@@ -77,7 +84,7 @@ unsigned int SPI_Word(unsigned int word_to_send) {
     unsigned char low_byte_to_send = word_to_send;              //grab the lower 8 bits
     unsigned char high_byte_to_send = (word_to_send >> 8);      //grab the upper 8 bit
     IFG2 &= ~(UCA0RXIFG);                                       //clear the flag
-    P1OUT &= 0b11011111;                                        //turn chip select on
+    P3OUT &= 0b11110111;                                        //turn chip select on
     while (!(IFG2 & UCA0TXIFG));                                //wait for transmit buffer to be ready
     UCA0TXBUF = high_byte_to_send;                              //send the high 8
     while (!(IFG2 & UCA0RXIFG));                                //wait for RX to finish
@@ -85,7 +92,7 @@ unsigned int SPI_Word(unsigned int word_to_send) {
     UCA0TXBUF = low_byte_to_send;                               //send the low 8
     while (!(IFG2 & UCA0RXIFG));                                //wait for RX to finish
     low_byte_received = UCA0RXBUF;                              //grab the RX'd byte
-    P1OUT |= 0b00100000;                                        //turn off chip select
+    P3OUT |= 0b00001000;                                        //turn off chip select
     word_received = high_byte_received;                         //now put the two bytes into a word
     word_received = (word_received << 8);
     word_received += low_byte_received;
