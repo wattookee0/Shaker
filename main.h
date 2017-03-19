@@ -21,9 +21,6 @@ typedef struct {
 extern system_status_t system_status;
 
 void system_Setup(void);    //holds functions that configure the hardware prior to the main loop
-
-void update_Status_LEDs(void);  //used for demo, turns on/off LEDs based on system status struct
-void check_Buttons(void);       //used for demo, checks the buttons and sets pins accordingly
 void main_Charging(void);       //charging loop, manages power supply
 
 #endif /* MAIN_H_ */

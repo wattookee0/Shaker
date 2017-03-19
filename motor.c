@@ -4,6 +4,7 @@
  *  Created on: Mar 17, 2017
  *      Author: dmatthews
  */
+#include "main.h"
 #include "motor.h"
 
 #define MOTOR_ON    1u
@@ -22,6 +23,7 @@ void run_Motor_Timed(unsigned long interval) {
     if (motor.motor_status == MOTOR_OFF) {
         set_Timer_Interval(&(motor.motor_timer), interval);
         start_Timer(&(motor.motor_timer));
+        system_status.motor_timer_expired_flag = FALSE;
         MOTOR_GO_RIGHT;
         motor.motor_status = MOTOR_ON;
         motor.motor_direction = MOTOR_RIGHT;
@@ -30,9 +32,14 @@ void run_Motor_Timed(unsigned long interval) {
 
 void check_Motor_State(void) {
     if (motor.motor_status == MOTOR_ON) {
-        if (is_Timer_Expired(&(motor.motor_timer))) {   //true = it's expired
-            MOTOR_STOP;
-            motor.motor_status = MOTOR_OFF;
+        //stop the motor if its timer is expired or current indicates stall
+        if (is_Timer_Expired(&(motor.motor_timer)) || (system_status.motor_stalled_flag == TRUE)) {   //true = it's expired
+            if (get_Timer_Elapsed_Time(&(motor.motor_timer)) > 3) {
+                MOTOR_STOP;
+                motor.motor_status = MOTOR_OFF;
+                stop_Timer(&(motor.motor_timer));
+                system_status.motor_timer_expired_flag = TRUE;
+            }
         }
     }
 }

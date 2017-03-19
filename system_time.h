@@ -22,7 +22,8 @@ extern unsigned long system_time;
 void configure_Main_Clock(void);
 
 unsigned char is_Timer_Expired(timer_t*);
+unsigned long get_Timer_Elapsed_Time(timer_t*);
 void set_Timer_Interval(timer_t*, signed long);
 void start_Timer(timer_t*);
-
+void stop_Timer(timer_t*);
 #endif /* SYSTEM_TIME_H_ */

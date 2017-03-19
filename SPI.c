@@ -77,7 +77,7 @@ unsigned char SPI_Byte(unsigned char byte_to_send) {
  * @param word_to_send  the word to send via SPI
  * @returns received_word   the word received via SPI
  */
-unsigned int SPI_Word(unsigned int word_to_send) {
+signed int SPI_Word(unsigned int word_to_send) {
     unsigned int word_received = 0;
     unsigned char low_byte_received;
     unsigned char high_byte_received;

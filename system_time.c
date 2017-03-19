@@ -84,6 +84,12 @@ unsigned char is_Timer_Expired(timer_t* timer_to_check) {
     }
 }
 
+unsigned long get_Timer_Elapsed_Time(timer_t* timer_to_peek) {
+    //system time minus the timer's start time (end time - interval) is time elapsed since timer started
+    unsigned long start_time = (timer_to_peek->end_time - timer_to_peek->interval);
+    return (system_time - start_time);
+}
+
 void set_Timer_Interval(timer_t* timer_to_set, signed long new_interval) {
     timer_to_set->interval = new_interval;
 }
@@ -94,4 +100,10 @@ void start_Timer(timer_t* timer_to_start) {
         timer_to_start->overflow = 1u;  //set the flag
     }
     timer_to_start->end_time = new_end_time;
+}
+
+void stop_Timer(timer_t* timer_to_stop) {
+    //just set end time to the current system time, which will make all is_Timer_Expired checks
+    //evaluate to true
+    timer_to_stop->end_time = system_time;
 }

@@ -7,12 +7,12 @@
 #include "temp_sensor.h"
 #include "moisture_sensor.h"
 #include "motor.h"
+#include "accelerometer.h"
+#include "current_sensor.h"
 
 /*
  * main.c
  */
-
-#define BATTERY_VOLTAGE_SOURCE 3
 
 unsigned int temp;
 unsigned int temp1;
@@ -53,40 +53,35 @@ void system_Setup(void) {
 
     __enable_interrupt();       //turn on all interrupts
     calibrate_Temperature();    //use ambient temp on power-on to set temp cutoff threshold
+    configure_Accel();          //configure the accelerometer
 }
 
 int main(void) {
 
     system_Setup();
-
-    temp = SPI_Word(0x2302);  //disable I2C, enable SPI 3-wire
-    temp = SPI_Word(0xA300);  //read the CTRL1 register
-
     run_Motor_Timed(100);
-
     //MAIN LOOP
     while (1) {
-        check_Motor_State();
         main_Charging();
         check_Temperature();
         check_Moisture();
-        //check temperature
-        //check motor state/timer
-        //check for accelerometer input
-        //check_Buttons();
-        //update_Status_LEDs();
+        check_Current();
+        check_Motor_State();
+        poll_Accel();
+        if (system_status.sufficient_supply_voltage_flag == TRUE) {
+            if (system_status.good_temperature_flag == TRUE) {
+                //if (system_status.moisture_present_flag == TRUE) {
+                    if (system_status.motor_stalled_flag == FALSE) {
+                        if (system_status.motor_timer_expired_flag == TRUE) {
+                            if (system_status.shake_detected_flag == TRUE) {
+                                run_Motor_Timed(100);
+                            }
+                        }
+                    }
+                //}
+            }
+        }
     }
-
-    //SPI test below here
-	//while (1) {
-//	    temp = SPI_Word(0x2303);  //three pin sPI mode
-/*        temp = SPI_Word(0xA000);  //read the CTRL1 register
-	    temp = SPI_Word(0x203F);  //write: turn on active mode
-	    temp = SPI_Word(0xA000);  //read the CTRL1 register
-	    temp1 = SPI_Word(0x2201); //data ready interrupt enable
-	    temp1 = SPI_Word(0b1000111101010101);
-	    temp++;*/
-	//}
 }
 
 void main_Charging(void) {
@@ -95,9 +90,10 @@ void main_Charging(void) {
     while (continue_charging) {
         check_Charger_Voltage();    //see if charger is still plugged in
         check_Battery_Voltage();    //see if battery is charged
-        battery_voltage = get_Battery_Voltage();            //just pull the value from the struct
+        battery_voltage = get_Battery_Voltage();//just pull the value from the struct
+        continue_charging = FALSE;
         if (battery_voltage < BATTERY_CHARGED) {            //if battery needs charging
-            if (system_status.charger_plugged_in_flag) {    //if a charger is plugged in
+/*            if (system_status.charger_plugged_in_flag) {    //if a charger is plugged in
                 continue_charging = TRUE;
                 set_Timer_Interval(&charge_timer, 100);     //set to charge for 100 ticks
                 start_Timer(&charge_timer);                 //start the timer
@@ -109,42 +105,14 @@ void main_Charging(void) {
             } else {                                        //no charger is plugged in
                 P1OUT &= 0b11011110;                        //turn off charging circuit
                 continue_charging = FALSE;                  //stop charging, escape loop
-            }
+            }*/
         } else if (battery_voltage < BATTERY_DEAD) {
             battery_voltage++;              //do nothing, don't allow user to escape this loop, either
         } else {
             continue_charging = FALSE;                      //escape the loop (normal operation)
         }
     }
-    P1OUT &= 0b11011110;    //turn off charging circuit
-}
-
-void update_Status_LEDs(void) {
-    if (system_status.moisture_present_flag == 1u) {
-        P1OUT   |= 0b00000001;  //shine LED
-    } else {
-        P1OUT   &= 0b11111110;  //turn off LED
-    }
-
-    if (system_status.good_temperature_flag == 1u) {
-        P2OUT   |= 0b00000001;  //shine LED
-    } else {
-        P2OUT   &= 0b11111110;  //turn off LED
-    }
-
-    if (system_status.sufficient_supply_voltage_flag == 1u) {
-        P2OUT   |= 0b00000010;  //shine LED
-    } else {
-        P2OUT   &= 0b11111101;  //turn off LED
-    }
-}
-
-void check_Buttons(void) {
-    if ((P1IN & BIT3) == BIT3) {
-        P2OUT   |= 0b00001100;
-    } else {
-        P2OUT   &= 0b11110011;
-    }
+    P1OUT &= 0b11111110;    //turn off charging circuit
 }
 
 void __attribute__((interrupt(PORT1_VECTOR))) P1_Interrupt(void) {
