@@ -11,7 +11,9 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./SPI.obj" \
+"./accelerometer.obj" \
 "./adc.obj" \
+"./current_sensor.obj" \
 "./interrupt.obj" \
 "./main.obj" \
 "./moisture_sensor.obj" \
@@ -161,8 +163,8 @@ Shaker.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "SPI.obj" "adc.obj" "interrupt.obj" "main.obj" "moisture_sensor.obj" "motor.obj" "system_time.obj" "temp_sensor.obj" "voltage_monitor.obj" 
-	-$(RM) "SPI.d" "adc.d" "interrupt.d" "main.d" "moisture_sensor.d" "motor.d" "system_time.d" "temp_sensor.d" "voltage_monitor.d" 
+	-$(RM) "SPI.obj" "accelerometer.obj" "adc.obj" "current_sensor.obj" "interrupt.obj" "main.obj" "moisture_sensor.obj" "motor.obj" "system_time.obj" "temp_sensor.obj" "voltage_monitor.obj" 
+	-$(RM) "SPI.d" "accelerometer.d" "adc.d" "current_sensor.d" "interrupt.d" "main.d" "moisture_sensor.d" "motor.d" "system_time.d" "temp_sensor.d" "voltage_monitor.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
